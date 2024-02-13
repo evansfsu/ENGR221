@@ -1,0 +1,40 @@
+Class MySet:
+    Constructor (__init__()):
+        Input: A list of the initial values in the set
+        Required attributes:
+            __s: Values in the set (list)
+            __size: Number of values in the set (int)
+        Implementation:
+            Initialize __s as an empty list
+            Initialize __size to 0
+            Iterate through the input list:
+                If the value is not already in __s, add it to __s and increment __size
+
+    search():
+        Input: A value to search for within the set
+        Output: A Boolean indicating whether the value is in the set
+        Implementation:
+            Iterate through __s:
+                If the value is found, return True
+            If the value is not found after iterating through all elements, return False
+
+    insert():
+        Input: A value to be added to the set
+        Output: None
+        Implementation:
+            Check if the value already exists in __s using search():
+                If the value is not found, append it to __s and increment __size
+
+    delete():
+        Input: A value to delete from the set
+        Output: A Boolean indicating whether the value was deleted from the set
+        Implementation:
+            Iterate through __s:
+                If the value is found, remove it from __s and decrement __size, then return True
+            If the value is not found after iterating through all elements, return False
+
+    traverse():
+        Input: None
+        Output: A printed list of all the items in the set
+        Implementation:
+            Iterate through __s and print each element
