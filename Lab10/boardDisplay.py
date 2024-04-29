@@ -17,6 +17,9 @@ class BoardDisplay:
         self.__display = pygame.display.set_mode((Preferences.GAME_BOARD_WIDTH, Preferences.GAME_BOARD_HEIGHT))
         # Image to show as the "head"
         self.headImage = None
+            
+        #adding a score
+        self.font = pygame.font.Font(None, 36)
 
     def updateGraphics(self, gameData):
         """ Re-draws the board, food, and snake based
@@ -24,6 +27,8 @@ class BoardDisplay:
         
         # Clear the board
         self.clear()
+
+
 
         # Draw the board
         for row in range(Preferences.NUM_CELLS_TALL):
@@ -35,8 +40,17 @@ class BoardDisplay:
         if gameData.getGameOver():
             self.displayGameOver()
 
+        #score addition
+        self.displayScore(gameData)
+
         # Update the display
         pygame.display.update()
+
+    #display score addition
+    def displayScore(self, gameData):
+        """ Display the player's score on the screen """
+        score_text = self.font.render("Score: " + str(gameData.getScore()), True, (255, 255, 255))
+        self.__display.blit(score_text, (100, 100))  # Display score at (10, 10) on the screen
 
     def clear(self):
         """ Resets the background of the display """

@@ -39,6 +39,14 @@ class GameData:
         # Whether or not the game is over
         self.__gameOver = False
 
+        #For adding score extra feature
+        self.__score = 0
+
+        self.__background_color = (0, 0, 0)
+        self.__snake_color = (255, 255, 0)
+        self.__food_color = (255, 255, 0)
+        self.__obstacle_color = (128, 128, 128)
+
     ##########################
     # Initialization methods #
     ##########################
@@ -146,6 +154,26 @@ class GameData:
     def setSnakeCells(self, snakeCells):
         """ Set the cells occupied by the snake """
         self.__snakeCells = snakeCells
+
+    def increaseScore(self, amount=1):
+        """ Increase the player's score """
+        self.__score += amount
+
+    def getScore(self):
+        """ Return the player's current score """
+        return self.__score
+    
+    def setBackground_color(self, color):
+        self.__background_color = color
+
+    def setSnake_color(self, color):
+        self.__snake_color = color
+
+    def setFood_color(self, color):
+        self.__food_color = color
+
+    def setObstacle_color(self, color):
+        self.__obstacle_color = color
 
 
     ##########################

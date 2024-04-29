@@ -1,7 +1,6 @@
 """
-Author: Prof. Alyssa
-The Controller of the game, including handling key presses
-(and AI in the next assignment). You will update this file.
+Author: Evan Schneider
+Modified: 4/28/2024
 
 Adapted from HMC CS60
 
@@ -24,6 +23,8 @@ class Controller():
         self.__display = BoardDisplay()
         # How many frames have passed
         self.__numCycles = 0
+        self.score = 0
+
 
         # Attempt to load any sounds and images
         try:
@@ -73,6 +74,13 @@ class Controller():
         self.__numCycles += 1
         # Update the display based on the new state
         self.__display.updateGraphics(self.__data)
+
+    def handleFoodCollision(self):
+        """Handle collision between snake and food."""
+        if self.__data.foodCollision():
+            self.__data.increaseScore()  # Increase the score when the snake eats food
+            self.score += 1  # Increment the score
+
 
     def checkKeypress(self):
         """ Update the game based on user input """
@@ -139,11 +147,10 @@ class Controller():
             self.__data.addFood()
 
     def getNextCellFromBFS(self):
-        """ Uses BFS to search for the food closest to the head of the snake.
-            Returns the *next* step the snake should take along the shortest path
+        """ Uses BFS to search for the food closest to the head of the snake. Returns the *next* step the snake should take along the shortest path
             to the closest food cell. """
         
-        # Parepare all the tiles to search
+        # Prepare all the tiles to search
         self.__data.resetCellsForSearch()
 
         # Initialize a queue to hold the tiles to search
@@ -155,18 +162,43 @@ class Controller():
         cellsToSearch.put(head)
 
         # Search!
-        # TODO implement BFS here
+        while not cellsToSearch.empty():
+            current_cell = cellsToSearch.get()
 
-        # If the search failed, return a random neighbor
-        return self.__data.getRandomNeighbor(head)
+            # Check if the current cell is the food cell
+            if current_cell.isFood():
+                # Get the first cell in the path
+                first_cell_in_path = self.getFirstCellInPath(current_cell)
+
+                # Determine the next cell in the path
+                next_cell_in_path = first_cell_in_path.getParent()
+
+                # Return the next cell in the path
+                return next_cell_in_path
+
+            # Add neighboring cells to the queue if not visited
+            neighbors = self.__data.getNeighbors(current_cell)
+            for neighbor in neighbors:
+                if not neighbor.getAddedToSearchList():
+                    neighbor.setAddedToSearchList()
+                    cellsToSearch.put(neighbor)
+
+        # If no path to food found, return None or a random neighbor
+        return None
 
     def getFirstCellInPath(self, foodCell):
-        """ TODO COMMENT HERE """
+        """ Returns the first cell in the path from the head to the food cell. """
 
-        # TODO
+        # Initialize the current cell as the food cell
+        current_cell = foodCell
+
+        # Traverse back along the path until finding the first cell
+        while current_cell.getParent() is not None:
+            current_cell = current_cell.getParent()
+
+        # Return the first cell in the path
+        return current_cell
         
-        return foodCell
-    
     def reverseSnake(self):
         # Get the current snake cells
         snakeCells = self.__data.getSnakeCells()
